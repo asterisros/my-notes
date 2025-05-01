@@ -1,4 +1,4 @@
-#My Notes
+# My Notes
 
 Aplikasi catatan sederhana yang dikembangkan dengan HTML, CSS, dan JavaScript.
 
@@ -14,7 +14,6 @@ Aplikasi catatan sederhana yang dikembangkan dengan HTML, CSS, dan JavaScript.
 ## Tangkapan Layar
 
 [segera diupdate Ketika project selesai]
-
 
 ## Cara Memulai
 
