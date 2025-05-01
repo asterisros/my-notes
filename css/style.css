@@ -1,0 +1,241 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: Arial, serif;
+  /* border: 1px solid black; */
+}
+
+html, body {
+  height: 100vh;
+  overflow: hidden; /* Hilangkan scroll pada viewport */
+}
+
+a {
+  text-decoration: none;
+}
+
+header {
+  background-color: #ffda22;
+  width: 100%;
+  padding: 10px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav h1 {
+  font-size: 24px;
+  color: #368f8b;
+  padding: 10px;
+}
+
+.logo-app {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0 16px;
+}
+
+.header-action {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-action input {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  margin-right: 8px;
+}
+
+.header-action button {
+  padding: 4px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.header-action button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+main {
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+h2.title {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notes-input {
+  width: 30%;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+.note-form label {
+  font-size: 16px;
+  font-weight: bold;
+}
+.note-form input,
+.note-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.note-form input {
+  height: 40px;
+}
+.note-form textarea {
+  height: 150px;
+  resize: none;
+}
+
+.save-button {
+  display: flex;
+  justify-content: flex-end;
+}
+.save-button button {
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.save-button button:hover {
+  background-color: #357ABD;
+}
+
+.notes-container {
+  flex: 1;
+}
+
+.all-notes-title .title {
+  font-size: 24px;
+  color: #333;
+}
+
+.all-notes-title {
+  position: sticky;
+  top: 60px;
+  background-color: #fff;
+  z-index: 10;
+  padding: 10px 0;
+}
+
+.notes-list {
+  max-height: calc(100vh - 120px); /* Kurangi tinggi header dan all-notes-title */
+  overflow-y: auto;
+  padding-bottom: 40px;
+}
+
+.notes-list-item {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.notes-list-item:last-child {
+  margin-bottom: 20px;
+}
+
+.notes-list-item .note-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.notes-list-item p {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.note-menu {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 24px;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-btn,
+.delete-btn {
+  display: block;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  background-color: #f0f0f0;
+}

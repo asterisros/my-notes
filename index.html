@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" class="logo-app">
+          <img
+            src="./assets/images/icon-notes.png"
+            alt="icon-notes"
+            width="28"
+          />
+          <h1>My Notes</h1>
+        </a>
+        <div class="header-action">
+          <label for="search" class="visually-hidden">Search notes</label>
+          <input type="text" id="search" placeholder="Search notes..." />
+          <button id="theme-toogle">
+            <img
+              src="./assets/images/icon-dark-mode.png"
+              alt="Toggle dark mode"
+              width="24"
+            />
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="content">
+          <div class="notes-input">
+            <div class="all-notes-title">
+              <h2 class="title">Write a Note</h2>
+            </div>
+            <form class="note-form">
+              <label for="note-title">Title</label>
+              <input type="text" id="note-title" placeholder="Note title..." />
+              <label for="note-content">Content</label>
+              <textarea
+                id="note-content"
+                placeholder="Write your note..."
+              ></textarea>
+              <div class="save-button">
+                <button type="submit">Add Note</button>
+              </div>
+            </form>
+          </div>
+          <div class="notes-container">
+            <div class="all-notes">
+              <div class="all-notes-title">
+                <h2 class="title">All Notes</h2>
+              </div>
+              <div class="notes-list">
+                <div class="notes-list-item">
+                  <div class="note-menu" hidden>
+                    <button class="menu-btn">⋮</button>
+                    <div class="menu-dropdown" hidden>
+                      <button class="edit-btn">Edit</button>
+                      <button class="delete-btn">Delete</button>
+                    </div>
+                  </div>
+                  <h3 class="note-title">Belanja Pagi</h3>
+                  <p>Ingat beli susu dan roti besok pagi.</p>
+                </div>
+                <div class="notes-list-item">
+                  <div class="note-menu" hidden>
+                    <button class="menu-btn">⋮</button>
+                    <div class="menu-dropdown" hidden>
+                      <button class="edit-btn">Edit</button>
+                      <button class="delete-btn">Delete</button>
+                    </div>
+                  </div>
+                  <h3 class="note-title">Belanja Pagi</h3>
+                  <p>Ingat beli susu dan roti besok pagi.</p>
+                </div>
+                <div class="notes-list-item">
+                  <div class="note-menu" hidden>
+                    <button class="menu-btn">⋮</button>
+                    <div class="menu-dropdown" hidden>
+                      <button class="edit-btn">Edit</button>
+                      <button class="delete-btn">Delete</button>
+                    </div>
+                  </div>
+                  <h3 class="note-title">Belanja Pagi</h3>
+                  <p>Ingat beli susu dan roti besok pagi.</p>
+                </div>
+                <div class="notes-list-item">
+                  <div class="note-menu" hidden>
+                    <button class="menu-btn">⋮</button>
+                    <div class="menu-dropdown" hidden>
+                      <button class="edit-btn">Edit</button>
+                      <button class="delete-btn">Delete</button>
+                    </div>
+                  </div>
+                  <h3 class="note-title">Belanja Pagi</h3>
+                  <p>Ingat beli susu dan roti besok pagi.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="" async defer></script>
+  </body>
+</html>
