@@ -6,7 +6,8 @@
   /* border: 1px solid black; */
 }
 
-html, body {
+html,
+body {
   height: 100vh;
   overflow: hidden; /* Hilangkan scroll pada viewport */
 }
@@ -141,16 +142,15 @@ h2.title {
   justify-content: flex-end;
 }
 .save-button button {
-  padding: 8px 16px;
-  background-color: #3498db;
-  color: white;
+  padding: 8px 24px;
+  background-color: #ffda22;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
 }
 .save-button button:hover {
-  background-color: #357ABD;
+  background-color: #c7ab1f;
 }
 
 .notes-container {
@@ -171,7 +171,9 @@ h2.title {
 }
 
 .notes-list {
-  max-height: calc(100vh - 120px); /* Kurangi tinggi header dan all-notes-title */
+  max-height: calc(
+    100vh - 120px
+  ); /* Kurangi tinggi header dan all-notes-title */
   overflow-y: auto;
   padding-bottom: 40px;
 }
