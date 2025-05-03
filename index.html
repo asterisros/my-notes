@@ -64,6 +64,29 @@
           </div>
         </div>
       </div>
+
+      <div class="modal" id="edit-modal" hidden>
+        <div class="modal-content">
+          <h2 class="title">Edit Note</h2>
+          <form class="edit-form">
+            <label for="edit-title-note">Title</label>
+            <input
+              type="text"
+              id="edit-title-note"
+              placeholder="Note title..."
+            />
+            <label for="edit-body-note">Content</label>
+            <textarea
+              id="edit-body-note"
+              placeholder="Write your note..."
+            ></textarea>
+            <div class="modal-buttons">
+              <button type="submit">Save Changes</button>
+              <button type="button" class="cancel-btn">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </main>
 
     <script src="./js/script.js"></script>

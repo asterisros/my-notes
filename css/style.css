@@ -220,8 +220,8 @@ h2.title {
 
 .menu-dropdown {
   position: absolute;
-  top: 24px;
-  right: 10px;
+  top: -5px;
+  right: 30px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -244,4 +244,102 @@ h2.title {
 .edit-btn:hover,
 .delete-btn:hover {
   background-color: #f0f0f0;
+}
+
+/* Modal */
+.modal[hidden] {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Overlay redup */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #368f8b;
+  padding-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit-form label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.edit-form input {
+  height: 40px;
+}
+
+.edit-form textarea {
+  height: 200px;
+  resize: none;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.modal-buttons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-buttons button[type="submit"] {
+  background-color: #ffda22;
+}
+
+.modal-buttons button[type="submit"]:hover {
+  background-color: #c7ab1f;
+}
+
+.modal-buttons .cancel-btn {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+.modal-buttons .cancel-btn:hover {
+  background-color: #bbb;
 }
