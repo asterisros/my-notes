@@ -215,12 +215,13 @@ h2.title {
   border: none;
   font-size: 18px;
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .menu-dropdown {
   position: absolute;
   top: 24px;
-  right: 0;
+  right: 10px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -229,12 +230,15 @@ h2.title {
 
 .edit-btn,
 .delete-btn {
-  display: block;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  width: 100%;
   padding: 8px 12px;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .edit-btn:hover,
