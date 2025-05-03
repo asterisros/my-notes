@@ -1,7 +1,34 @@
-// console.log("Script dimuat");
-
 const inputNote = document.querySelector(".note-form");
 const saveNote = document.querySelector(".notes-list");
+const editModal = document.getElementById('edit-modal');
+const editNote = editModal.querySelector('.edit-form');
+const editTitleNote = document.getElementById('edit-title-note');
+const editBodyNote = document.getElementById('edit-body-note');
+const cancelEdit = editModal.querySelector('.cancel-btn');
+
+let editIndex = -1; // untuk melacak catatan yang diedit
+
+inputNote.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  let titleNote = document.getElementById("note-title").value;
+  const bodyNote = document.getElementById("note-content").value;
+
+  if (titleNote.trim() === "") {
+    titleNote = "UNTITLED";
+  }
+  if (bodyNote.trim() === "") {
+    alert("Notes can't be empty!");
+    return;
+  }
+
+  const newNote = { title: titleNote, body: bodyNote };
+  const notes = JSON.parse(localStorage.getItem("notes")) || [];
+  notes.push(newNote);
+  localStorage.setItem("notes", JSON.stringify(notes));
+  createNotes(titleNote, bodyNote, notes.length - 1);
+  inputNote.reset();
+});
 
 function createNotes(title, body, index) {
   // console.log("Membuat card untuk:", { title, body });
@@ -48,6 +75,10 @@ function createNotes(title, body, index) {
   // console.log("Card ditambahkan ke saveNote");
 }
 
+function editNotes(index) {
+
+}
+
 function deleteNotes(index) {
   console.log('Menghapus catatan pada index ke ', index);
 
@@ -73,25 +104,3 @@ if (document.readyState === 'loading') {
 } else {
   loadAllNotes();
 }
-
-inputNote.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  let titleNote = document.getElementById('note-title').value;
-  const bodyNote = document.getElementById('note-content').value;
-
-  if (titleNote.trim() === '') {
-    titleNote = 'UNTITLED';
-  }
-  if (bodyNote.trim() === '') {
-    alert('Notes can\'t be empty!');
-    return;
-  }
-
-  const newNote = { title: titleNote, body: bodyNote };
-  const notes = JSON.parse(localStorage.getItem('notes')) || [];
-  notes.push(newNote);
-  localStorage.setItem('notes', JSON.stringify(notes));
-  createNotes(titleNote, bodyNote, notes.length-1);
-  inputNote.reset();
-});
