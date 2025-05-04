@@ -58,8 +58,7 @@
               <div class="all-notes-title">
                 <h2 class="title">All Notes</h2>
               </div>
-              <div class="notes-list">
-              </div>
+              <div class="notes-list"></div>
             </div>
           </div>
         </div>
@@ -85,6 +84,27 @@
               <button type="button" class="cancel-btn">Cancel</button>
             </div>
           </form>
+        </div>
+      </div>
+
+      <div class="modal" id="notification-modal" hidden>
+        <div class="notification-content">
+          <div class="notification-title">
+            <img
+              src="./assets/images/icon-warning.png"
+              alt="warning-icon"
+              width="32"
+            />
+            <h2>Warning</h2>
+          </div>
+          <p id="notification-message">
+            Are you sure you want to delete this note?
+            <br />This action cannot be undone.
+          </p>
+          <div class="notification-buttons">
+            <button class="cancel-btn">Cancel</button>
+            <button class="ok-btn">OK</button>
+          </div>
         </div>
       </div>
     </main>
