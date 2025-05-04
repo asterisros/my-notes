@@ -6,7 +6,52 @@ const editTitleNote = document.getElementById("edit-title-note");
 const editBodyNote = document.getElementById("edit-body-note");
 const cancelEdit = editModal.querySelector(".cancel-btn");
 
+// Notification
+const notificationModal = document.getElementById("notification-modal");
+const notif_icon = document.getElementById("notification-icon");
+const notif_title = document.getElementById("notification-title");
+const notif_message = document.getElementById("notification-message");
+const notif_confirmButton = notificationModal.querySelector(".confirm-btn");
+const notif_cancelButton = notificationModal.querySelector(".cancel-btn");
+
 let editIndex = -1; // untuk melacak catatan yang diedit
+let deleteIndex = -1; // untuk melacak catatan yang dihapus
+
+function showNotifications({ title, message, icon, onConfirm }) {
+  notif_title.textContent = title;
+  notif_message.innerHTML = message;
+  notif_icon.src = icon;
+  notif_icon.alt = `${title.toLowerCase()}-icon`;
+
+  // refresh confirm button supaya tidak bertumpuk pada event listener sebelumnya
+  const refreshedConfirmButton = notif_confirmButton.cloneNode(true);
+  refreshedConfirmButton.parentNode.replaceChild(
+    refreshedConfirmButton,
+    notif_confirmButton
+  );
+  notif_confirmButton = refreshedConfirmButton;
+
+  // add event listener ke tombol confirm
+  notif_confirmButton.addEventListener("click", () => {
+    onConfirm(); // jalankan fungsi yang diberikan
+    notificationModal.hidden = true; // tutup notifikasi setelah pilih tombol confirm
+  });
+
+  // refresh cancel button supaya tidak bertumpuk pada event listener sebelumnya
+  const refreshedCancelButton = notif_cancelButton.cloneNode(true);
+  refreshedCancelButton.parentNode.replaceChild(
+    refreshedCancelButton,
+    notif_cancelButton
+  );
+  notif_cancelButton = refreshedCancelButton;
+
+  // add event listener ke tombol cancel
+  notif_cancelButton.addEventListener("click", () => {
+    notificationModal.hidden = true; // tutup notifikasi ketika pilih tombol cancel
+  });
+
+  notificationModal.hidden = false;
+}
 
 inputNote.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -51,7 +96,7 @@ editNote.addEventListener("submit", (event) => {
   loadAllNotes();
 });
 
-cancelEdit.addEventListener('click', () => {
+cancelEdit.addEventListener("click", () => {
   editModal.hidden = true;
 });
 
@@ -83,15 +128,15 @@ function createNotes(title, body, index) {
   `;
 
   // Kebab Menu for edit and delete
-  const buttonMenu = cardNote.querySelector('.menu-btn');
-  const dropdownMenu = cardNote.querySelector('.menu-dropdown');
-  buttonMenu.addEventListener('click', () => {
+  const buttonMenu = cardNote.querySelector(".menu-btn");
+  const dropdownMenu = cardNote.querySelector(".menu-dropdown");
+  buttonMenu.addEventListener("click", () => {
     dropdownMenu.hidden = !dropdownMenu.hidden;
   });
 
   // Edit option
-  const editBtn = cardNote.querySelector('.edit-btn');
-  editBtn.addEventListener('click', () => {
+  const editBtn = cardNote.querySelector(".edit-btn");
+  editBtn.addEventListener("click", () => {
     const notes = JSON.parse(localStorage.getItem("notes")) || [];
     console.log("Index saat edit:", index, "Notes:", notes); // Debugging
     const note = notes[index];
@@ -99,7 +144,7 @@ function createNotes(title, body, index) {
     if (!note) {
       console.error("Catatan tidak ditemukan untuk index:", index);
       alert("Catatan tidak ditemukan. Memperbarui daftar...");
-      loadNotes(); // Refresh daftar jika index tidak valid
+      loadNotes(); // Refreshed daftar jika index tidak valid
       return;
     }
 
@@ -133,7 +178,7 @@ function loadAllNotes() {
   // console.log("Memuat catatan dari localStorage...");
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
   // console.log("Catatan yang dimuat:", notes);
-  saveNote.innerHTML = '';
+  saveNote.innerHTML = "";
   notes.forEach((note) => {
     createNotes(note.title, note.body);
   });
