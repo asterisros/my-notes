@@ -400,12 +400,12 @@ h2.title {
   font-size: 14px;
 }
 
-.notification-buttons .ok-btn {
+.notification-buttons .confirm-btn {
   background-color: #368f8b;
   color: #ffffff;
 }
 
-.notification-buttons .ok-btn:hover {
+.notification-buttons .confirm-btn:hover {
   background-color: #2c5856;
   color: #ffffff;
 }
