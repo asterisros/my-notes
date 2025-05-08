@@ -411,6 +411,7 @@ h2.title {
 }
 
 .notification-buttons .cancel-btn {
+  display: block;
   background-color: transparent;
   border: 1px solid #ccc;
   color: #333;

@@ -37,7 +37,13 @@ if (!cancelEdit) {
   );
 }
 
-function showNotifications({ title, message, icon, onConfirm }) {
+function showNotifications({
+  title,
+  message,
+  icon,
+  onConfirm,
+  showCancelButton = false,
+}) {
   console.log("Menampilkan notifikasi:", { title, message });
   if (!notificationModal || !notif_confirmButton || !notif_cancelButton) {
     console.error(
@@ -64,31 +70,41 @@ function showNotifications({ title, message, icon, onConfirm }) {
     return;
   }
 
+  notif_confirmButton.textContent = showCancelButton ? "Confirm" : "OK";
+
   // add event listener ke tombol confirm
   notif_confirmButton.addEventListener("click", () => {
-    console.log("Tombol Confirm diklik"); // Debugging
+    console.log("Tombol Confirm/OK diklik"); // Debugging
     onConfirm(); // jalankan fungsi yang diberikan
     notificationModal.hidden = true; // tutup notifikasi setelah pilih tombol confirm
   });
 
-  // refresh cancel button supaya tidak bertumpuk pada event listener sebelumnya
-  if (notif_cancelButton && notif_cancelButton.parentNode) {
-    const newCancelBtn = notif_cancelButton.cloneNode(true);
-    notif_cancelButton.parentNode.replaceChild(
-      newCancelBtn,
-      notif_cancelButton
-    );
-    notif_cancelButton = newCancelBtn; // Update variabel global
-  } else {
-    console.error("Cancel button tidak ditemukan atau sudah dihapus dari DOM");
-    return;
-  }
+  // Hanya tampilkan tombol Cancel jika showCancelButton true
+  if (showCancelButton) {
+    // refresh cancel button supaya tidak bertumpuk pada event listener sebelumnya
+    if (notif_cancelButton && notif_cancelButton.parentNode) {
+      const newCancelBtn = notif_cancelButton.cloneNode(true);
+      notif_cancelButton.parentNode.replaceChild(
+        newCancelBtn,
+        notif_cancelButton
+      );
+      notif_cancelButton = newCancelBtn;
+    } else {
+      console.error(
+        "Cancel button tidak ditemukan atau sudah dihapus dari DOM"
+      );
+      return;
+    }
 
-  // add event listener ke tombol cancel
-  notif_cancelButton.addEventListener("click", () => {
-    console.log("Tombol Cancel diklik"); // Debugging
-    notificationModal.hidden = true; // tutup notifikasi ketika pilih tombol cancel
-  });
+    notif_cancelButton.style.display = "block"; // Tampilkan tombol Cancel
+    // add event listener ke tombol cancel
+    notif_cancelButton.addEventListener("click", () => {
+      console.log("Tombol Cancel diklik"); // Debugging
+      notificationModal.hidden = true; // tutup notifikasi ketika pilih tombol cancel
+    });
+  } else {
+    notif_cancelButton.style.display = "none"; // Sembunyikan tombol Cancel
+  }
 
   notificationModal.hidden = false;
 }
@@ -108,6 +124,7 @@ inputNote.addEventListener("submit", (event) => {
       message: "Notes can't be empty",
       icon: "./assets/images/icon-warning.png",
       onConfirm: () => {},
+      showCancelButton: false,
     });
     return;
   }
@@ -135,6 +152,7 @@ editNote.addEventListener("submit", (event) => {
       message: "Notes can't be empty",
       icon: "./assets/images/icon-warning.png",
       onConfirm: () => {},
+      showCancelButton: false,
     });
   }
 
@@ -148,6 +166,7 @@ editNote.addEventListener("submit", (event) => {
       message: "Note updated successfully!",
       icon: "./assets/images/icon-success.png",
       onConfirm: () => {},
+      showCancelButton: false,
     });
   } else {
     console.error("Index tidak valid saat menyimpan edit:", editIndex);
@@ -223,6 +242,7 @@ function createNotes(title, body, index) {
         message: "Note not found. Updating notes list...",
         icon: "./assets/images/icon-error.png",
         onConfirm: () => loadAllNotes(), // Refreshed daftar jika index tidak valid
+        showCancelButton: false,
       });
       return;
     }
@@ -247,6 +267,7 @@ function createNotes(title, body, index) {
         "Are you sure you want to delete this note?<br/>This action cannot be undone.",
       icon: "./assets/images/icon-warning.png",
       onConfirm: () => deleteNotes(index),
+      showCancelButton: true,
     });
   });
 
