@@ -223,7 +223,8 @@ function createNotes(title, body, index) {
   // Kebab Menu for edit and delete
   const buttonMenu = cardNote.querySelector(".menu-btn");
   const dropdownMenu = cardNote.querySelector(".menu-dropdown");
-  buttonMenu.addEventListener("click", () => {
+  buttonMenu.addEventListener("click", (event) => {
+    event.stopPropagation(); // Mencegah klik pada tombol menu memicu event klik di document
     dropdownMenu.hidden = !dropdownMenu.hidden;
   });
 
@@ -274,6 +275,27 @@ function createNotes(title, body, index) {
   saveNote.appendChild(cardNote);
   // console.log("Card ditambahkan ke saveNote");
 }
+
+// Tambah event listener global untuk menutup dropdown saat klik di luar
+document.addEventListener('click', (event) => {
+  const allDropdowns = document.querySelectorAll('.menu-dropdown');
+  const allMenuButtons = document.querySelectorAll('.menu-btn');
+
+  // Cek apakah klik terjadi di dalam tombol menu atau dropdown
+  const isClickInsideMenu = Array.from(allMenuButtons).some(button => 
+    button.contains(event.target)
+  );
+  const isClickInsideDropdown = Array.from(allDropdowns).some(dropdown => 
+    dropdown.contains(event.target)
+  );
+
+  // Jika klik bukan di tombol menu atau dropdown, sembunyikan semua dropdown
+  if (!isClickInsideMenu && !isClickInsideDropdown) {
+    allDropdowns.forEach(dropdown => {
+      dropdown.hidden = true;
+    });
+  }
+});
 
 function deleteNotes(index) {
   console.log("Menghapus catatan pada index ke ", index);
