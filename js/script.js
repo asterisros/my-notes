@@ -353,10 +353,32 @@ function loadAllNotes() {
   console.log("Memuat catatan dari localStorage...");
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
   console.log("Catatan yang dimuat:", notes);
+
+  // Ambil elemen pesan kosong
+  const emptyMessage = document.querySelector(".empty-message");
+
+  // Pastikan elemen pesan ada
+  if (!emptyMessage) {
+    console.error("Elemen .empty-message tidak ditemukan di HTML.");
+    return;
+  }
+
   saveNote.innerHTML = "";
-  notes.forEach((note, index) => {
-    createNotes(note.title, note.body, index);
-  });
+
+  // Tambahkan kembali elemen pesan kosong ke dalam notes-list
+  saveNote.appendChild(emptyMessage);
+
+  // Cek apakah catatan kosong
+  if (notes.length === 0) {
+    // Jika kosong, tampilkan pesan
+    emptyMessage.hidden = false;
+  } else {
+    // Jika ada catatan, sembunyikan pesan dan tampilkan catatan
+    emptyMessage.hidden = true;
+    notes.forEach((note, index) => {
+      createNotes(note.title, note.body, index);
+    });
+  }
 }
 
 if (document.readyState === "loading") {

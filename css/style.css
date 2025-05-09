@@ -204,6 +204,13 @@ h2.title {
   line-height: 1.5;
 }
 
+.empty-message {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  margin: 20px 0;
+}
+
 .note-menu {
   position: absolute;
   top: 8px;
