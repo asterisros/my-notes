@@ -107,6 +107,11 @@ function showNotifications({
   }
 
   notificationModal.hidden = false;
+  console.log("Modal seharusnya muncul, hidden:", notificationModal.hidden); // Debugging
+  console.log(
+    "Style modal:",
+    window.getComputedStyle(notificationModal).display
+  ); // Debugging
 }
 
 inputNote.addEventListener("submit", (event) => {
@@ -134,48 +139,63 @@ inputNote.addEventListener("submit", (event) => {
   notes.push(newNote);
   localStorage.setItem("notes", JSON.stringify(notes));
   createNotes(titleNote, bodyNote, notes.length - 1);
+  showNotifications({
+    title: "Success",
+    message: "Note added successfully!",
+    icon: "./assets/images/icon-success.png",
+    onConfirm: () => {},
+    showCancelButton: false,
+  });
   inputNote.reset();
 });
 
-editNote.addEventListener("submit", (event) => {
-  event.preventDefault();
+if (editNote && !isEditNoteListenerAdded) {
+  editNote.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-  let titleNote = editTitleNote.value;
-  const bodyNote = editBodyNote.value;
+    let titleNote = editTitleNote.value;
+    const bodyNote = editBodyNote.value;
 
-  if (titleNote.trim() === "") {
-    titleNote = "UNTITLED";
-  }
-  if (bodyNote.trim() === "") {
-    showNotifications({
-      title: "Error",
-      message: "Notes can't be empty",
-      icon: "./assets/images/icon-warning.png",
-      onConfirm: () => {},
-      showCancelButton: false,
-    });
-  }
+    if (titleNote.trim() === "") {
+      titleNote = "UNTITLED";
+    }
+    if (bodyNote.trim() === "") {
+      showNotifications({
+        title: "Error",
+        message: "Notes can't be empty",
+        icon: "./assets/images/icon-warning.png",
+        onConfirm: () => {},
+        showCancelButton: false,
+      });
+      return; // agar tidak melanjutkan jika ada error
+    }
 
-  const notes = JSON.parse(localStorage.getItem("notes")) || [];
-  if (editIndex >= 0 && editIndex < notes.length) {
-    console.log("Menyimpan edit untuk index:", editIndex); // Debugging
-    notes[editIndex] = { title: titleNote, body: bodyNote };
-    localStorage.setItem("notes", JSON.stringify(notes));
-    showNotifications({
-      title: "Success",
-      message: "Note updated successfully!",
-      icon: "./assets/images/icon-success.png",
-      onConfirm: () => {},
-      showCancelButton: false,
-    });
-  } else {
-    console.error("Index tidak valid saat menyimpan edit:", editIndex);
-  }
-  editModal.hidden = true;
-  editNote.reset(); // Reset form edit
-  editIndex = -1; // Reset editIndex
-  loadAllNotes();
-});
+    const notes = JSON.parse(localStorage.getItem("notes")) || [];
+    if (editIndex >= 0 && editIndex < notes.length) {
+      console.log("Menyimpan edit untuk index:", editIndex); // Debugging
+      notes[editIndex] = { title: titleNote, body: bodyNote };
+      localStorage.setItem("notes", JSON.stringify(notes));
+      showNotifications({
+        title: "Success",
+        message: "Note updated successfully!",
+        icon: "./assets/images/icon-success.png",
+        onConfirm: () => {},
+        showCancelButton: false,
+      });
+    } else {
+      console.error("Index tidak valid saat menyimpan edit:", editIndex);
+    }
+    editModal.hidden = true;
+    editNote.reset(); // Reset form edit
+    editIndex = -1; // Reset editIndex
+    loadAllNotes();
+  });
+  isEditNoteListenerAdded = true;
+} else if (!editNote) {
+  console.error(
+    "Tidak dapat menambahkan event listener ke editNote karena elemen tidak ditemukan."
+  );
+}
 
 cancelEdit.addEventListener("click", () => {
   console.log("Tombol Cancel di modal edit diklik"); // Debugging
@@ -277,21 +297,21 @@ function createNotes(title, body, index) {
 }
 
 // Tambah event listener global untuk menutup dropdown saat klik di luar
-document.addEventListener('click', (event) => {
-  const allDropdowns = document.querySelectorAll('.menu-dropdown');
-  const allMenuButtons = document.querySelectorAll('.menu-btn');
+document.addEventListener("click", (event) => {
+  const allDropdowns = document.querySelectorAll(".menu-dropdown");
+  const allMenuButtons = document.querySelectorAll(".menu-btn");
 
   // Cek apakah klik terjadi di dalam tombol menu atau dropdown
-  const isClickInsideMenu = Array.from(allMenuButtons).some(button => 
+  const isClickInsideMenu = Array.from(allMenuButtons).some((button) =>
     button.contains(event.target)
   );
-  const isClickInsideDropdown = Array.from(allDropdowns).some(dropdown => 
+  const isClickInsideDropdown = Array.from(allDropdowns).some((dropdown) =>
     dropdown.contains(event.target)
   );
 
   // Jika klik bukan di tombol menu atau dropdown, sembunyikan semua dropdown
   if (!isClickInsideMenu && !isClickInsideDropdown) {
-    allDropdowns.forEach(dropdown => {
+    allDropdowns.forEach((dropdown) => {
       dropdown.hidden = true;
     });
   }
@@ -304,10 +324,29 @@ function deleteNotes(index) {
   if (index >= 0 && index < notes.length) {
     notes.splice(index, 1);
     localStorage.setItem("notes", JSON.stringify(notes));
+    showNotifications({
+      title: "Success",
+      message: "Note deleted successfully!",
+      icon: "./assets/images/icon-success.png",
+      onConfirm: () => {
+        loadAllNotes();
+        console.log('KONFIRM SUKSES HAPUS OK JALAN GRAK');
+      },
+      showCancelButton: false,
+    });
   } else {
     console.error("Index tidak valid saat menghapus:", index);
+    showNotifications({
+      title: "Error",
+      message: "Failed to delete note. Please try again.",
+      icon: "./assets/images/icon-error.png",
+      onConfirm: () => {
+        loadAllNotes();
+      },
+      showCancelButton: false,
+    });
   }
-  loadAllNotes();
+  loadAllNotes(); 
 }
 
 function loadAllNotes() {
