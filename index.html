@@ -36,6 +36,7 @@
     <main>
       <div class="container">
         <div class="content">
+          <!-- Add new notes -->
           <div class="notes-input">
             <div class="all-notes-title">
               <h2 class="title">Write a Note</h2>
@@ -53,52 +54,74 @@
               </div>
             </form>
           </div>
+          <!-- View all notes -->
           <div class="notes-container">
             <div class="all-notes">
               <div class="all-notes-title">
                 <h2 class="title">All Notes</h2>
               </div>
               <div class="notes-list">
-                <p class="empty-message" hidden>Notes empty. Add notes here.</p>
+                <p class="empty-state" hidden>Notes empty...</p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="modal" id="edit-modal" hidden>
-        <div class="modal-content">
-          <h2 class="title">Edit Note</h2>
-          <form class="edit-form">
-            <label for="edit-title-note">Title</label>
-            <input
-              type="text"
-              id="edit-title-note"
-              placeholder="Note title..."
-            />
-            <label for="edit-body-note">Content</label>
-            <textarea
-              id="edit-body-note"
-              placeholder="Write your note..."
-            ></textarea>
-            <div class="modal-buttons">
-              <button type="submit">Save Changes</button>
-              <button type="button" class="cancel-btn">Cancel</button>
+          <!-- Edit the notes -->
+          <div class="modal" id="edit-modal" hidden>
+            <div class="modal-content">
+              <h2 class="title">Edit Note</h2>
+              <form class="edit-form">
+                <label for="edit-title-note">Title</label>
+                <input
+                  type="text"
+                  id="edit-title-note"
+                  placeholder="Note title..."
+                />
+                <label for="edit-body-note">Content</label>
+                <textarea
+                  id="edit-body-note"
+                  placeholder="Write your note..."
+                ></textarea>
+                <div class="modal-buttons">
+                  <button type="submit">Save Changes</button>
+                  <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-      </div>
-
-      <div class="modal" id="notification-modal" hidden>
-        <div class="notification-content">
-          <div class="notification-title">
-            <img id="notification-icon" src="" alt=""/>
-            <h2 id="notification-title"></h2>
           </div>
-          <p id="notification-message"></p>
-          <div class="notification-buttons">
-            <button class="cancel-btn">Cancel</button>
-            <button class="confirm-btn">Confirm</button>
+          <!-- Toast for Notification -->
+          <div class="toast-container">
+            <div class="toast toast-success" id="toast-success" hidden>
+              <img
+                src="./assets/images/icon-success.png"
+                alt="success-icon"
+                width="20"
+                class="toast-icon"
+              />
+              <span class="toast-message"></span>
+            </div>
+            <div class="toast toast-error" id="toast-error" hidden>
+              <img
+                src="./assets/images/icon-error.png"
+                alt="error-icon"
+                width="20"
+                class="toast-icon"
+              />
+              <span class="toast-message"></span>
+            </div>
+          </div>
+          <!-- Modal for Delete notes -->
+          <div class="modal" id="notification-modal" hidden>
+            <div class="notification-content">
+              <div class="notification-title">
+                <img id="notification-icon" src="" alt="" />
+                <h2 id="notification-title"></h2>
+              </div>
+              <p id="notification-message"></p>
+              <div class="notification-buttons">
+                <button class="cancel-btn">Cancel</button>
+                <button class="confirm-btn">Confirm</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
