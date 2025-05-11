@@ -1,29 +1,23 @@
-// Add and Save Notes
+// VARIABLES //
+// --- Add and Save Notes
 const inputNote = document.querySelector(".note-form");
 const saveNote = document.querySelector(".notes-list");
-
-// Edit Notes
+// --- Edit Notes
 const editModal = document.getElementById("edit-modal");
 const editNote = editModal ? editModal.querySelector(".edit-form") : null;
 const editTitleNote = document.getElementById("edit-title-note");
 const editBodyNote = document.getElementById("edit-body-note");
 const cancelEdit = editModal ? editModal.querySelector(".cancel-btn") : null;
-
-// Notification
-const modalNotification = document.getElementById("notification-modal");
-const notif_icon = document.getElementById("notification-icon");
-const notif_title = document.getElementById("notification-title");
-const notif_message = document.getElementById("notification-message");
-let notif_confirmButton = modalNotification
-  ? modalNotification.querySelector(".confirm-btn")
-  : null;
-let notif_cancelButton = modalNotification
-  ? modalNotification.querySelector(".cancel-btn")
-  : null;
-
+// --- Notification
+const deleteNotification = document.getElementById("delete-modal");
+let notif_confirmButton = deleteNotification ? deleteNotification.querySelector(".confirm-btn") : null;
+let notif_cancelButton = deleteNotification  ? deleteNotification.querySelector(".cancel-btn") : null;
+// --- Indexing
 let editIndex = -1; // untuk melacak catatan yang diedit
 let deleteIndex = -1; // Untuk melacak catatan yang dihapus
 let isEditNoteListenerAdded = false; // Flag untuk mencegah event listener bertumpuk
+// END OF VARIABLES //
+
 
 inputNote.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -54,105 +48,7 @@ inputNote.addEventListener("submit", (event) => {
   inputNote.reset();
 });
 
-function showNotifications({ title, message, icon, onConfirm }) {
-  
-  notif_title.textContent = title;
-  notif_message.innerHTML = message;
-  notif_icon.src = icon;
-  notif_icon.alt = `${title.toLowerCase()}-icon`;
-
-  // refresh confirm button supaya tidak bertumpuk pada event listener sebelumnya
-  if (notif_confirmButton && notif_confirmButton.parentNode) {
-    const newConfirmBtn = notif_confirmButton.cloneNode(true);
-    notif_confirmButton.parentNode.replaceChild(
-      newConfirmBtn,
-      notif_confirmButton
-    );
-    notif_confirmButton = newConfirmBtn; // Update variabel global
-  } else {
-    console.error("Confirm button tidak ditemukan atau sudah dihapus dari DOM");
-    return;
-  }
-
-  // add event listener ke tombol confirm
-  notif_confirmButton.addEventListener("click", () => {
-    console.log("Tombol Confirm/OK diklik"); // Debugging
-    onConfirm(); // jalankan fungsi yang diberikan
-    modalNotification.hidden = true; // tutup notifikasi setelah pilih tombol confirm
-  });
-
-  // refresh cancel button supaya tidak bertumpuk pada event listener sebelumnya
-  if (notif_cancelButton && notif_cancelButton.parentNode) {
-    const newCancelBtn = notif_cancelButton.cloneNode(true);
-    notif_cancelButton.parentNode.replaceChild(
-      newCancelBtn,
-      notif_cancelButton
-    );
-    notif_cancelButton = newCancelBtn;
-  } else {
-    console.error("Cancel button tidak ditemukan atau sudah dihapus dari DOM");
-    return;
-  }
-
-  notif_cancelButton.style.display = "block"; // Tampilkan tombol Cancel
-  // add event listener ke tombol cancel
-  notif_cancelButton.addEventListener("click", () => {
-    console.log("Tombol Cancel diklik"); // Debugging
-    modalNotification.hidden = true; // tutup notifikasi ketika pilih tombol cancel
-  });
-
-  modalNotification.hidden = false;
-}
-
-editNote.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  let titleNote = editTitleNote.value;
-  const bodyNote = editBodyNote.value;
-
-  if (titleNote.trim() === "") {
-    titleNote = "UNTITLED";
-  }
-  if (bodyNote.trim() === "") {
-    showToast({
-      type: "error",
-      message: "Notes can't be empty",
-    });
-    return; // agar tidak melanjutkan jika ada error
-  }
-
-  const notes = JSON.parse(localStorage.getItem("notes")) || [];
-  if (editIndex >= 0 && editIndex < notes.length) {
-    console.log("Menyimpan edit untuk index:", editIndex); // Debugging
-    notes[editIndex] = { title: titleNote, body: bodyNote };
-    localStorage.setItem("notes", JSON.stringify(notes));
-    showToast({
-      type: "success",
-      message: "Note updated successfully!",
-    });
-  } else {
-    console.error("Index tidak valid saat menyimpan edit:", editIndex);
-    showToast({
-      type: "error",
-      message: "Failed to save note, please try again.",
-    });
-  }
-  editModal.hidden = true;
-  editNote.reset(); // Reset form edit
-  editIndex = -1; // Reset editIndex
-  loadAllNotes();
-});
-isEditNoteListenerAdded = true;
-
-cancelEdit.addEventListener("click", () => {
-  console.log("Tombol Cancel di modal edit diklik"); // Debugging
-  editModal.hidden = true;
-  editNote.reset(); // Reset form edit
-  editIndex = -1; // Reset editIndex
-});
-
 function createNotes(title, body, index) {
-  
   const cardNote = document.createElement("div");
   cardNote.classList.add("notes-list-item");
   cardNote.dataset.index = index; // Simpan index di dataset
@@ -191,9 +87,9 @@ function createNotes(title, body, index) {
   // Edit option
   const editBtn = cardNote.querySelector(".edit-btn");
   editBtn.addEventListener("click", () => {
-    console.log("Tombol Edit diklik, index:", index); // Debugging
+    console.log("Tombol Edit diklik, index:", index);
     const notes = JSON.parse(localStorage.getItem("notes")) || [];
-    console.log("Index saat edit:", index, "Notes:", notes); // Debugging
+    console.log("Index saat edit:", index, "Notes:", notes);
     const note = notes[index];
 
     if (typeof index === "undefined" || !note) {
@@ -215,26 +111,181 @@ function createNotes(title, body, index) {
   // Delete option
   const deleteBtn = cardNote.querySelector(".delete-btn");
   deleteBtn.addEventListener("click", () => {
-    console.log("Tombol Delete diklik, index:", index);
+    // console.log("Tombol Delete diklik, index:", index);
     if (typeof index === "undefined") {
       console.error("Index tidak valid saat menghapus:", index);
       return;
     }
-    showNotifications({
-      title: "Warning",
-      message:
-        "Are you sure you want to delete this note?<br/>This action cannot be undone.",
-      icon: "./assets/images/icon-warning.png",
-      onConfirm: () => deleteNotes(index),
-      showCancelButton: true,
-    });
+    deleteIndex = index; // Simpan index catatan yang akan dihapus
+    deleteConfirmation(() => deleteNotes(index));
   });
 
   saveNote.appendChild(cardNote);
-  // console.log("Card ditambahkan ke saveNote");
 }
 
-// Tambah event listener global untuk menutup dropdown saat klik di luar
+function updateNotes(event) {
+  event.preventDefault();
+  
+  let titleNote = editTitleNote.value;
+  const bodyNote = editBodyNote.value;
+  
+  if (titleNote.trim() === "") {
+    titleNote = "UNTITLED";
+  }
+  if (bodyNote.trim() === "") {
+    showToast({
+      type: "error",
+      message: "Notes can't be empty",
+    });
+    return; // agar tidak melanjutkan jika ada error
+  }
+
+  const notes = JSON.parse(localStorage.getItem("notes")) || [];
+  if (editIndex >= 0 && editIndex < notes.length) {
+    console.log("Menyimpan edit untuk index:", editIndex);
+    notes[editIndex] = { title: titleNote, body: bodyNote };
+    localStorage.setItem("notes", JSON.stringify(notes));
+    showToast({
+      type: "success",
+      message: "Note updated successfully!",
+    });
+  } else {
+    console.error("Index tidak valid saat menyimpan edit:", editIndex);
+    showToast({
+      type: "error",
+      message: "Failed to save note, please try again.",
+    });
+  }
+  editModal.hidden = true;
+  editNote.reset();
+  editIndex = -1; // Reset editIndex
+  loadAllNotes();
+}
+
+if (editNote && !isEditNoteListenerAdded) {
+  editNote.addEventListener("submit", updateNotes);
+  isEditNoteListenerAdded = true;
+} else if (!editNote) {
+  console.error(
+    "Tidak dapat menambahkan event listener ke editNote karena elemen tidak ditemukan."
+  );
+}
+
+if (cancelEdit) {
+  cancelEdit.addEventListener("click", () => {
+    console.log("Tombol Cancel di modal edit diklik"); // Debugging
+    editModal.hidden = true;
+    editNote.reset(); // Reset form edit
+    editIndex = -1; // Reset editIndex
+  });
+} else {
+  console.error(
+    "Tidak dapat menambahkan event listener ke cancelEdit karena elemen tidak ditemukan."
+  );
+}
+
+function deleteNotes(index) {
+  console.log("Menghapus catatan pada index ke ", index);
+
+  const notes = JSON.parse(localStorage.getItem("notes")) || [];
+  if (index >= 0 && index < notes.length) {
+    notes.splice(index, 1);
+    localStorage.setItem("notes", JSON.stringify(notes));
+    showToast({
+      type: "success",
+      message: "Note deleted successfully!",
+    });
+  } else {
+    console.error("Index tidak valid saat menghapus:", index);
+    showToast({
+      type: "error",
+      message: "Failed to delete note. Please try again.",
+    });
+  }
+  loadAllNotes();
+}
+
+function loadAllNotes() {
+  console.log("Memuat catatan dari localStorage...");
+  const notes = JSON.parse(localStorage.getItem("notes")) || [];
+  console.log("Catatan yang dimuat:", notes);
+
+  // Empty State
+  const emptyState = document.querySelector(".empty-state");
+  console.log("Jumlah card sebelum dihapus:", saveNote.children.length);
+  saveNote.innerHTML = "";
+  saveNote.appendChild(emptyState);
+  console.log("Jumlah card setelah dihapus:", saveNote.children.length);
+
+  if (notes.length === 0) {
+    emptyState.hidden = false;
+  } else {
+    emptyState.hidden = true;
+    notes.forEach((note, index) => {
+      createNotes(note.title, note.body, index);
+    });
+  }
+}
+
+function deleteConfirmation(onConfirm) {
+  if (!deleteNotification || !notif_confirmButton || !notif_cancelButton) {
+    console.error("Elemen modal tidak lengkap. Periksa HTML.");
+    return;
+  }
+  // Tambah event listener ke tombol Yes (Confirm)
+  const newConfirmBtn = notif_confirmButton.cloneNode(true);
+  notif_confirmButton.parentNode.replaceChild(
+    newConfirmBtn,
+    notif_confirmButton
+  );
+  notif_confirmButton = newConfirmBtn;
+  notif_confirmButton.addEventListener("click", () => {
+    console.log("Tombol Yes diklik");
+    onConfirm();
+    deleteNotification.hidden = true;
+  });
+
+  // Tambah event listener ke tombol No (Cancel)
+  const newCancelBtn = notif_cancelButton.cloneNode(true);
+  notif_cancelButton.parentNode.replaceChild(newCancelBtn, notif_cancelButton);
+  notif_cancelButton = newCancelBtn;
+  notif_cancelButton.addEventListener("click", () => {
+    console.log("Tombol No diklik");
+    deleteNotification.hidden = true;
+  });
+
+  // Tampilkan modal
+  deleteNotification.hidden = false;
+}
+
+function showToast({ type, message }) {
+  // Ambil elemen toast berdasarkan tipe (success atau error)
+  const toast = document.getElementById(`toast-${type}`);
+  const toastMessage = toast.querySelector(".toast-message");
+
+  if (!toast || !toastMessage) {
+    console.error(`Toast untuk tipe ${type} tidak ditemukan. Periksa HTML.`);
+    return;
+  }
+
+  toastMessage.textContent = message;
+
+  // Hapus kelas hide (jika ada) dan tambah kelas show untuk animasi muncul
+  toast.classList.remove("hide");
+  toast.hidden = false;
+  toast.classList.add("show");
+
+  // Sembunyikan toast setelah 3 detik
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.classList.add("hide");
+    setTimeout(() => {
+      toast.hidden = true;
+    }, 300);
+  }, 3000);
+}
+
+// Event listener global untuk menutup dropdown saat klik di luar area dropdown
 document.addEventListener("click", (event) => {
   const allDropdowns = document.querySelectorAll(".menu-dropdown");
   const allMenuButtons = document.querySelectorAll(".menu-btn");
@@ -254,92 +305,6 @@ document.addEventListener("click", (event) => {
     });
   }
 });
-
-function deleteNotes(index) {
-  console.log("Menghapus catatan pada index ke ", index);
-
-  const notes = JSON.parse(localStorage.getItem("notes")) || [];
-  if (index >= 0 && index < notes.length) {
-    notes.splice(index, 1);
-    localStorage.setItem("notes", JSON.stringify(notes));
-    showToast({
-      type: "success",
-      message: "Note deleted successfully!",
-    });
-    loadAllNotes();
-  } else {
-    console.error("Index tidak valid saat menghapus:", index);
-    showToast({
-      type: "error",
-      message: "Failed to delete note. Please try again.",
-    });
-    loadAllNotes();
-  }
-}
-
-function loadAllNotes() {
-  console.log("Memuat catatan dari localStorage...");
-  const notes = JSON.parse(localStorage.getItem("notes")) || [];
-  console.log("Catatan yang dimuat:", notes);
-
-  // Ambil elemen pesan kosong
-  const emptyState = document.querySelector(".empty-state");
-
-  // Pastikan elemen pesan ada
-  if (!emptyState) {
-    console.error("Elemen .empty-state tidak ditemukan di HTML.");
-    return;
-  }
-
-  saveNote.innerHTML = "";
-
-  // Tambahkan kembali elemen pesan kosong ke dalam notes-list
-  saveNote.appendChild(emptyState);
-
-  // Cek apakah catatan kosong
-  if (notes.length === 0) {
-    // Jika kosong, tampilkan pesan
-    emptyState.hidden = false;
-  } else {
-    // Jika ada catatan, sembunyikan pesan dan tampilkan catatan
-    emptyState.hidden = true;
-    notes.forEach((note, index) => {
-      createNotes(note.title, note.body, index);
-    });
-  }
-}
-
-// Fungsi untuk menampilkan toast
-function showToast({ type, message }) {
-  // Ambil elemen toast berdasarkan tipe (success atau error)
-  const toast = document.getElementById(`toast-${type}`);
-  const toastMessage = toast.querySelector(".toast-message");
-
-  if (!toast || !toastMessage) {
-    console.error(`Toast untuk tipe ${type} tidak ditemukan. Periksa HTML.`);
-    return;
-  }
-
-  // Atur pesan
-  toastMessage.textContent = message;
-
-  // Hapus kelas hide (jika ada) dan tambah kelas show untuk animasi muncul
-  toast.classList.remove("hide");
-  toast.hidden = false;
-  toast.classList.add("show");
-
-  // Sembunyikan toast setelah 3 detik
-  setTimeout(() => {
-    // Tambah kelas hide untuk animasi menghilang
-    toast.classList.remove("show");
-    toast.classList.add("hide");
-
-    // Sembunyikan sepenuhnya setelah animasi selesai
-    setTimeout(() => {
-      toast.hidden = true;
-    }, 300); // Sesuaikan dengan durasi animasi fade-out (0.3 detik)
-  }, 3000); // Toast muncul selama 3 detik
-}
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", loadAllNotes);
