@@ -449,3 +449,10 @@ h2.title {
 .toast.hide {
   animation: fadeOut 0.3s ease-out forwards;
 }
+
+/* HIGHLIGHT SEARCH NOTES STYLE */
+.highlight {
+  background-color: #ffeb3b;
+  color: #333;
+  border-radius: 3px;
+}

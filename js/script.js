@@ -45,7 +45,7 @@ inputNote.addEventListener("submit", (event) => {
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
   notes.push(newNote);
   localStorage.setItem("notes", JSON.stringify(notes));
-  createNotes(titleNote, bodyNote, notes.length - 1);
+  createNotes(titleNote, bodyNote, notes.length - 1, searchNote ? searchNote.value : "");
   showToast({
     type: "success",
     message: "Note added successfully!",
@@ -54,7 +54,11 @@ inputNote.addEventListener("submit", (event) => {
   loadAllNotes(searchNote ? searchNote.value : "");
 });
 
-function createNotes(title, body, index) {
+function createNotes(title, body, index, searchQuery = "") {
+  // Highlight judul dan isi
+  const highlightedTitle = highlightText(title, searchQuery);
+  const highlightedBody = highlightText(body, searchQuery);
+
   const cardNote = document.createElement("div");
   cardNote.classList.add("notes-list-item");
   cardNote.dataset.index = index; // Simpan index di dataset
@@ -78,8 +82,8 @@ function createNotes(title, body, index) {
         </button>
       </div>
     </div>
-    <h3 class="note-title">${title}</h3>
-    <p>${body}</p>
+    <h3 class="note-title">${highlightedTitle}</h3>
+    <p>${highlightedBody}</p>
   `;
 
   // Kebab Menu for edit and delete
@@ -243,8 +247,8 @@ function loadAllNotes(searchQuery = "") {
   console.log("Jumlah card setelah dihapus:", saveNote.children.length);
 
   // Tampilkan catatan sesuai pencarian
-  filteredNotes.forEach((note, index) => {
-    createNotes(note.title, note.body, index);
+  filteredNotes.forEach(note => {
+    createNotes(note.title, note.body, note.originalIndex, query);
   });
   console.log("Jumlah card setelah dibuat ulang:", saveNote.children.length);
 
@@ -375,6 +379,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Muat catatan saat halaman dimuat
   loadAllNotes();
 });
+
+function highlightText(text, query) {
+  if (!query || query.trim() === "") return text;
+
+  const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`(${escapedQuery})`, "gi");
+  return text.replace(regex, '<span class="highlight">$1</span>');
+}
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", loadAllNotes);
