@@ -22,7 +22,31 @@ let notif_cancelButton = deleteNotification
 let editIndex = -1; // untuk melacak catatan yang diedit
 let deleteIndex = -1; // Untuk melacak catatan yang dihapus
 let isEditNoteListenerAdded = false; // Flag untuk mencegah event listener bertumpuk
+// --- Theme Option
+const themeToggle = document.getElementById("theme-toggle");
+const themeToggleIcon = themeToggle ? themeToggle.querySelector("img") : null;
 // END OF VARIABLES //
+
+function setTheme(theme) {
+  if(theme === "dark") {
+    document.documentElement.classList.add("dark");
+    themeToggleIcon.src = "./assets/images/icon-light-mode.png";
+    themeToggleIcon.alt = "theme light mode";
+  } else {
+    document.documentElement. classList.remove("dark");
+    themeToggleIcon.src = "./assets/images/icon-dark-mode.png";
+    themeToggleIcon.alt = "theme dark mode";
+  }
+  localStorage.setItem("theme", theme);
+}
+
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const currentTheme = localStorage.getItem("theme") || "light";
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+  });
+}
 
 inputNote.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -363,6 +387,10 @@ document.addEventListener("click", (event) => {
 
 // Pastikan toast tersembunyi saat halaman dimuat
 document.addEventListener("DOMContentLoaded", () => {
+  
+  const savedTheme = localStorage.getItem("theme") || "light";
+  setTheme(savedTheme);
+
   const toastSuccess = document.getElementById("toast-success");
   const toastError = document.getElementById("toast-error");
   if (toastSuccess) {
