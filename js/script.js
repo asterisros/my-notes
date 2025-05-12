@@ -8,16 +8,21 @@ const editNote = editModal ? editModal.querySelector(".edit-form") : null;
 const editTitleNote = document.getElementById("edit-title-note");
 const editBodyNote = document.getElementById("edit-body-note");
 const cancelEdit = editModal ? editModal.querySelector(".cancel-btn") : null;
+// --- Search Notes
+const searchNote = document.getElementById("search-note");
 // --- Notification
 const deleteNotification = document.getElementById("delete-modal");
-let notif_confirmButton = deleteNotification ? deleteNotification.querySelector(".confirm-btn") : null;
-let notif_cancelButton = deleteNotification  ? deleteNotification.querySelector(".cancel-btn") : null;
+let notif_confirmButton = deleteNotification
+  ? deleteNotification.querySelector(".confirm-btn")
+  : null;
+let notif_cancelButton = deleteNotification
+  ? deleteNotification.querySelector(".cancel-btn")
+  : null;
 // --- Indexing
 let editIndex = -1; // untuk melacak catatan yang diedit
 let deleteIndex = -1; // Untuk melacak catatan yang dihapus
 let isEditNoteListenerAdded = false; // Flag untuk mencegah event listener bertumpuk
 // END OF VARIABLES //
-
 
 inputNote.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -46,6 +51,7 @@ inputNote.addEventListener("submit", (event) => {
     message: "Note added successfully!",
   });
   inputNote.reset();
+  loadAllNotes(searchNote ? searchNote.value : "");
 });
 
 function createNotes(title, body, index) {
@@ -98,7 +104,7 @@ function createNotes(title, body, index) {
         type: "error",
         message: "Note not found. Please refresh the page...",
       });
-      loadAllNotes();
+      loadAllNotes(searchNote ? searchNote.value : "");
       return;
     }
 
@@ -125,10 +131,10 @@ function createNotes(title, body, index) {
 
 function updateNotes(event) {
   event.preventDefault();
-  
+
   let titleNote = editTitleNote.value;
   const bodyNote = editBodyNote.value;
-  
+
   if (titleNote.trim() === "") {
     titleNote = "UNTITLED";
   }
@@ -205,26 +211,71 @@ function deleteNotes(index) {
   loadAllNotes();
 }
 
-function loadAllNotes() {
-  console.log("Memuat catatan dari localStorage...");
+function loadAllNotes(searchQuery = "") {
+  console.log(
+    "Memuat catatan dari localStorage dengan pencarian:",
+    searchQuery
+  );
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
-  console.log("Catatan yang dimuat:", notes);
+  const notesWithIndex = notes.map((note, index) => ({
+    ...note,
+    originalIndex: index,
+  }));
 
-  // Empty State
-  const emptyState = document.querySelector(".empty-state");
+  // searchQuery harus berupa string
+  const query = typeof searchQuery === "string" ? searchQuery : "";
+
+  // Filter catatan berdasarkan search query
+  const filteredNotes =
+    query.trim() === ""
+      ? notesWithIndex
+      : notesWithIndex.filter((note) => {
+          const searchLower = query.toLowerCase();
+          return (
+            note.title.toLowerCase().includes(searchLower) ||
+            note.body.toLowerCase().includes(searchLower)
+          );
+        });
+  console.log("Catatan yang cocok dengan pencarian:", filteredNotes);
+
   console.log("Jumlah card sebelum dihapus:", saveNote.children.length);
-  saveNote.innerHTML = "";
-  saveNote.appendChild(emptyState);
+  saveNote.innerHTML = ""; // untuk mengupdate tampilan catatan ke yang terbaru
   console.log("Jumlah card setelah dihapus:", saveNote.children.length);
+
+  // Tampilkan catatan sesuai pencarian
+  filteredNotes.forEach((note, index) => {
+    createNotes(note.title, note.body, index);
+  });
+  console.log("Jumlah card setelah dibuat ulang:", saveNote.children.length);
+
+  // Empty State & No Search Results
+  const emptyState = document.querySelector(".empty-state");
+  const emptyMessage = document.querySelector(".empty-message");
+  const searchNoResults = document.querySelector(".search-no-results");
 
   if (notes.length === 0) {
     emptyState.hidden = false;
+    emptyMessage.hidden = false;
+    searchNoResults.hidden = true;
+  } else if (filteredNotes.length === 0) {
+    // Ada catatan, tapi pencarian tidak menemukan hasil
+    emptyState.hidden = false;
+    emptyMessage.hidden = true;
+    searchNoResults.hidden = false;
   } else {
+    // Ada catatan dan pencarian menemukan hasil
     emptyState.hidden = true;
-    notes.forEach((note, index) => {
-      createNotes(note.title, note.body, index);
-    });
+    emptyMessage.hidden = true;
+    searchNoResults.hidden = true;
   }
+}
+
+if (searchNote) {
+  searchNote.addEventListener("input", (event) => {
+    const searchQuery = event.target.value;
+    console.log("Pencarian berubah:", searchQuery);
+    loadAllNotes(searchQuery);
+  });
 }
 
 function deleteConfirmation(onConfirm) {
@@ -304,6 +355,25 @@ document.addEventListener("click", (event) => {
       dropdown.hidden = true;
     });
   }
+});
+
+// Pastikan toast tersembunyi saat halaman dimuat
+document.addEventListener("DOMContentLoaded", () => {
+  const toastSuccess = document.getElementById("toast-success");
+  const toastError = document.getElementById("toast-error");
+  if (toastSuccess) {
+    toastSuccess.hidden = true;
+    toastSuccess.classList.remove("show");
+    toastSuccess.classList.add("hide");
+  }
+  if (toastError) {
+    toastError.hidden = true;
+    toastError.classList.remove("show");
+    toastError.classList.add("hide");
+  }
+
+  // Muat catatan saat halaman dimuat
+  loadAllNotes();
 });
 
 if (document.readyState === "loading") {

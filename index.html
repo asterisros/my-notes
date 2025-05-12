@@ -21,7 +21,7 @@
         </a>
         <div class="header-action">
           <label for="search" class="visually-hidden">Search notes</label>
-          <input type="text" id="search" placeholder="Search notes..." />
+          <input type="text" id="search-note" placeholder="Search notes..." />
           <button id="theme-toogle">
             <img
               src="./assets/images/icon-dark-mode.png"
@@ -60,8 +60,10 @@
               <div class="all-notes-title">
                 <h2 class="title">All Notes</h2>
               </div>
-              <div class="notes-list">
-                <p class="empty-state" hidden>Notes empty...</p>
+              <div class="notes-list"></div>
+              <div class="empty-state" hidden>
+                <p class="empty-message">No notes yet</p>
+                <p class="search-no-results" hidden>No notes match your search</p>
               </div>
             </div>
           </div>

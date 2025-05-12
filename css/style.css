@@ -197,11 +197,16 @@ h2.title {
   color: #333;
   line-height: 1.5;
 }
+
+/* === EMPTY STATE === */
 .empty-state {
   text-align: center;
   color: #888;
   font-size: 14px;
   font-style: italic;
+}
+.empty-message,
+.search-no-results {
   margin: 100px 0;
 }
 
