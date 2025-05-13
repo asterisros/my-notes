@@ -1,6 +1,7 @@
 # My Notes
 
-Aplikasi catatan sederhana yang dikembangkan dengan HTML, CSS, dan JavaScript. [Silahkan di akses pada halaman berikut: https://asterisros.github.io/my-notes/]
+Aplikasi catatan sederhana yang dikembangkan dengan HTML, CSS, dan JavaScript. 
+Silahkan di akses pada halaman berikut: https://asterisros.github.io/my-notes/
 
 ## Progress Aplikasi: [100%/100%]
 
@@ -16,7 +17,7 @@ Aplikasi catatan sederhana yang dikembangkan dengan HTML, CSS, dan JavaScript. [
 
 ## Tangkapan Layar
 
-[segera diupdate Ketika project selesai]
+![Screenshot Aplikasi](assets/images/screenshot__my-notes.png)
 
 ## Cara Memulai
 
