@@ -28,12 +28,12 @@ const themeToggleIcon = themeToggle ? themeToggle.querySelector("img") : null;
 // END OF VARIABLES //
 
 function setTheme(theme) {
-  if(theme === "dark") {
+  if (theme === "dark") {
     document.documentElement.classList.add("dark");
     themeToggleIcon.src = "./assets/images/icon-light-mode.png";
     themeToggleIcon.alt = "theme light mode";
   } else {
-    document.documentElement. classList.remove("dark");
+    document.documentElement.classList.remove("dark");
     themeToggleIcon.src = "./assets/images/icon-dark-mode.png";
     themeToggleIcon.alt = "theme dark mode";
   }
@@ -69,7 +69,12 @@ inputNote.addEventListener("submit", (event) => {
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
   notes.push(newNote);
   localStorage.setItem("notes", JSON.stringify(notes));
-  createNotes(titleNote, bodyNote, notes.length - 1, searchNote ? searchNote.value : "");
+  createNotes(
+    titleNote,
+    bodyNote,
+    notes.length - 1,
+    searchNote ? searchNote.value : ""
+  );
   showToast({
     type: "success",
     message: "Note added successfully!",
@@ -255,7 +260,7 @@ function loadAllNotes(searchQuery = "") {
   saveNote.innerHTML = ""; // untuk mengupdate tampilan catatan ke yang terbaru
 
   // Tampilkan catatan sesuai pencarian
-  filteredNotes.forEach(note => {
+  filteredNotes.forEach((note) => {
     createNotes(note.title, note.body, note.originalIndex, query);
   });
 
@@ -367,7 +372,6 @@ document.addEventListener("click", (event) => {
 
 // Pastikan toast tersembunyi saat halaman dimuat
 document.addEventListener("DOMContentLoaded", () => {
-  
   const savedTheme = localStorage.getItem("theme") || "light";
   setTheme(savedTheme);
 
