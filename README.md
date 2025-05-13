@@ -2,7 +2,7 @@
 
 Aplikasi catatan sederhana yang dikembangkan dengan HTML, CSS, dan JavaScript.
 
-## Progress Aplikasi: [82%/100%]
+## Progress Aplikasi: [100%/100%]
 
 ## Fitur:
 
@@ -12,7 +12,7 @@ Aplikasi catatan sederhana yang dikembangkan dengan HTML, CSS, dan JavaScript.
 4. Notifikasi CRUD [100%]
 5. Pencarian: Mencari catatan tertentu [100%]
 6. Mode Tema: Mengganti tema gelap/terang sesuai keinginan [100%]
-7. Aplikasi responsif pada berbagai ukuran layar [0/100% - on working]
+7. Aplikasi responsif pada berbagai ukuran layar [100%]
 
 ## Tangkapan Layar
 
