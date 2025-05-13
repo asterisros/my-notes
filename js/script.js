@@ -121,13 +121,10 @@ function createNotes(title, body, index, searchQuery = "") {
   // Edit option
   const editBtn = cardNote.querySelector(".edit-btn");
   editBtn.addEventListener("click", () => {
-    console.log("Tombol Edit diklik, index:", index);
     const notes = JSON.parse(localStorage.getItem("notes")) || [];
-    console.log("Index saat edit:", index, "Notes:", notes);
     const note = notes[index];
 
     if (typeof index === "undefined" || !note) {
-      console.error("Catatan tidak ditemukan untuk index:", index);
       showToast({
         type: "error",
         message: "Note not found. Please refresh the page...",
@@ -145,7 +142,6 @@ function createNotes(title, body, index, searchQuery = "") {
   // Delete option
   const deleteBtn = cardNote.querySelector(".delete-btn");
   deleteBtn.addEventListener("click", () => {
-    // console.log("Tombol Delete diklik, index:", index);
     if (typeof index === "undefined") {
       console.error("Index tidak valid saat menghapus:", index);
       return;
@@ -176,7 +172,6 @@ function updateNotes(event) {
 
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
   if (editIndex >= 0 && editIndex < notes.length) {
-    console.log("Menyimpan edit untuk index:", editIndex);
     notes[editIndex] = { title: titleNote, body: bodyNote };
     localStorage.setItem("notes", JSON.stringify(notes));
     showToast({
@@ -207,7 +202,6 @@ if (editNote && !isEditNoteListenerAdded) {
 
 if (cancelEdit) {
   cancelEdit.addEventListener("click", () => {
-    console.log("Tombol Cancel di modal edit diklik"); // Debugging
     editModal.hidden = true;
     editNote.reset(); // Reset form edit
     editIndex = -1; // Reset editIndex
@@ -219,8 +213,6 @@ if (cancelEdit) {
 }
 
 function deleteNotes(index) {
-  console.log("Menghapus catatan pada index ke ", index);
-
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
   if (index >= 0 && index < notes.length) {
     notes.splice(index, 1);
@@ -240,10 +232,6 @@ function deleteNotes(index) {
 }
 
 function loadAllNotes(searchQuery = "") {
-  console.log(
-    "Memuat catatan dari localStorage dengan pencarian:",
-    searchQuery
-  );
   const notes = JSON.parse(localStorage.getItem("notes")) || [];
   const notesWithIndex = notes.map((note, index) => ({
     ...note,
@@ -264,17 +252,12 @@ function loadAllNotes(searchQuery = "") {
             note.body.toLowerCase().includes(searchLower)
           );
         });
-  console.log("Catatan yang cocok dengan pencarian:", filteredNotes);
-
-  console.log("Jumlah card sebelum dihapus:", saveNote.children.length);
   saveNote.innerHTML = ""; // untuk mengupdate tampilan catatan ke yang terbaru
-  console.log("Jumlah card setelah dihapus:", saveNote.children.length);
 
   // Tampilkan catatan sesuai pencarian
   filteredNotes.forEach(note => {
     createNotes(note.title, note.body, note.originalIndex, query);
   });
-  console.log("Jumlah card setelah dibuat ulang:", saveNote.children.length);
 
   // Empty State & No Search Results
   const emptyState = document.querySelector(".empty-state");
@@ -301,7 +284,6 @@ function loadAllNotes(searchQuery = "") {
 if (searchNote) {
   searchNote.addEventListener("input", (event) => {
     const searchQuery = event.target.value;
-    console.log("Pencarian berubah:", searchQuery);
     loadAllNotes(searchQuery);
   });
 }
@@ -319,7 +301,6 @@ function deleteConfirmation(onConfirm) {
   );
   notif_confirmButton = newConfirmBtn;
   notif_confirmButton.addEventListener("click", () => {
-    console.log("Tombol Yes diklik");
     onConfirm();
     deleteNotification.hidden = true;
   });
@@ -329,7 +310,6 @@ function deleteConfirmation(onConfirm) {
   notif_cancelButton.parentNode.replaceChild(newCancelBtn, notif_cancelButton);
   notif_cancelButton = newCancelBtn;
   notif_cancelButton.addEventListener("click", () => {
-    console.log("Tombol No diklik");
     deleteNotification.hidden = true;
   });
 
